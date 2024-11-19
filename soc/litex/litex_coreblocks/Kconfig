@@ -1,0 +1,18 @@
+# Copyright (c) 2024 Piotr Wegrzyn (Kuznia Rdzeni)
+# SPDX-License-Identifier: Apache-2.0
+
+config SOC_LITEX_COREBLOCKS
+	select RISCV
+	select INCLUDE_RESET_VECTOR
+	select RISCV_ISA_RV32I
+	select RISCV_ISA_EXT_ZICSR
+	select RISCV_ISA_EXT_ZIFENCEI
+	select ATOMIC_OPERATIONS_C
+
+if SOC_LITEX_COREBLOCKS
+
+config LITEX_CSR_DATA_WIDTH
+	int "Select Control/Status register width"
+	default 32
+
+endif # SOC_LITEX_COREBLOCKS

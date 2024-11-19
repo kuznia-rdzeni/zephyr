@@ -1,0 +1,192 @@
+/*
+ * Copyright (c) 2024 Piotr Wegrzyn (Kuznia Rdzeni)
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/ {
+	#address-cells = <1>;
+	#size-cells = <1>;
+	compatible = "litex,coreblocks", "litex-dev";
+	model = "litex,coreblocks";
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		cpu0: cpu@0 {
+			clock-frequency = <50000000>;
+			compatible = "litex,coreblocks-basic", "riscv";
+			device_type = "cpu";
+			reg = <0>;
+			riscv,isa = "rv32im_zicsr_zifencei";
+			status = "okay";
+
+			hlic: interrupt-controller {
+				compatible = "riscv,cpu-intc";
+				#address-cells = <1>;
+				#interrupt-cells = <1>;
+				interrupt-controller;
+				firq: firq {
+					#address-cells = <1>;
+					interrupt-map-mask = <0x0 0xffffffff>;
+					interrupt-map = <
+						0  0 &hlic 0 16
+						0  1 &hlic 0 17
+						0  2 &hlic 0 18
+						0  3 &hlic 0 19
+						0  4 &hlic 0 20
+						0  5 &hlic 0 21
+						0  6 &hlic 0 22
+						0  7 &hlic 0 23
+						0  8 &hlic 0 24
+						0  9 &hlic 0 25
+						0 10 &hlic 0 26
+						0 11 &hlic 0 27
+						0 12 &hlic 0 28
+						0 13 &hlic 0 29
+						0 14 &hlic 0 30
+						0 15 &hlic 0 31
+						0 17 &hlic 0 31
+					>;
+					#interrupt-cells = <1>;
+				};
+			};
+
+		};
+	};
+	soc {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "litex,coreblocks";
+		interrupt-parent = <&firq>;
+		ranges;
+		ctrl0: soc_controller@82000000 {
+			compatible = "litex,soc-controller";
+			reg =  <0x82000000 0x4
+				0x82000004 0x4
+				0x82000008 0x4>;
+			reg-names = "reset",
+				"scratch",
+				"bus_errors";
+		};
+		uart0: serial@82007000 {
+			compatible = "litex,uart0";
+			interrupts = <0>;
+			reg =  <0x82007000 0x4
+				0x82007004 0x4
+				0x82007008 0x4
+				0x8200700c 0x4
+				0x82007010 0x4
+				0x82007014 0x4
+				0x82007018 0x4
+				0x8200701c 0x4>;
+			reg-names =
+				"rxtx",
+				"txfull",
+				"rxempty",
+				"ev_status",
+				"ev_pending",
+				"ev_enable",
+				"txempty",
+				"rxfull";
+		};
+		timer0: timer@82006800 {
+			compatible = "litex,timer0";
+			interrupts = <1>;
+			reg =  <0x82006800 0x4
+				0x82006804 0x4
+				0x82006808 0x4
+				0x8200680c 0x4
+				0x82006810 0x4
+				0x82006814 0x4
+				0x82006818 0x4
+				0x8200681c 0x4
+				0x82006820 0x4
+				0x82006824 0x8>;
+			reg-names =
+				"load",
+				"reload",
+				"en",
+				"update_value",
+				"value",
+				"ev_status",
+				"ev_pending",
+				"ev_enable",
+				"uptime_latch",
+				"uptime_cycles";
+		};
+		eth0: ethernet@82000800 {
+			compatible = "litex,eth0";
+			interrupts = <0x3>;
+			reg =  <0x82000800 0x4
+				0x82000804 0x4
+				0x82000808 0x4
+				0x8200080c 0x4
+				0x82000810 0x4
+				0x82000814 0x4
+				0x82000818 0x4
+				0x8200081c 0x4
+				0x82000820 0x4
+				0x82000824 0x4
+				0x82000828 0x4
+				0x8200082c 0x4
+				0x82000830 0x4
+				0x82000834 0x4
+				0x80000000 0x2000>;
+			local-mac-address = [10 e2 d5 00 00 02];
+			reg-names = "rx_slot",
+				"rx_length",
+				"rx_errors",
+				"rx_ev_status",
+				"rx_ev_pending",
+				"rx_ev_enable",
+				"tx_start",
+				"tx_ready",
+				"tx_level",
+				"tx_slot",
+				"tx_length",
+				"tx_ev_status",
+				"tx_ev_pending",
+				"tx_ev_enable",
+				"buffers";
+		};
+		gpio0: gpio@82002800 {
+			compatible = "litex,gpio";
+			reg = <0x82002800 0x4>;
+			reg-names = "control";
+			ngpios = <8>;
+			port-is-output;
+			gpio-controller;
+			#gpio-cells = <2>;
+		};
+		gpio1: gpio@82006000 {
+			compatible = "litex,gpio";
+			reg =  <0x82006000 0x4
+				0x82006004 0x4
+				0x82006008 0x4
+				0x82006010 0x4
+				0x82006014 0x4>;
+			interrupts = <4>;
+			reg-names = "base",
+				"irq_mode",
+				"irq_edge",
+				"irq_pend",
+				"irq_en";
+			ngpios = <14>;
+			gpio-controller;
+			#gpio-cells = <2>;
+		};
+		i2c0: i2c@82001800 {
+		    reg = <0x82001800 0x4
+			   0x82001804 0x4>;
+		    reg-names = "write",
+				"read";
+			clock-frequency = <100000>;
+			compatible = "litex,i2c";
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+		};
+	};
+};

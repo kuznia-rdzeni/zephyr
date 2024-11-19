@@ -1,0 +1,5 @@
+board:
+  name: litex_coreblocks
+  vendor: litex
+  socs:
+  - name: litex_coreblocks

@@ -1,0 +1,10 @@
+# Copyright (c) 2024 Piotr Wegrzyn (Kuznia Rdzeni)
+# SPDX-License-Identifier: Apache-2.0
+
+config SOC_LITEX_COREBLOCKS
+	bool
+	help
+	  LiteX Coreblocks system implementation
+
+config SOC
+	default "litex_coreblocks" if SOC_LITEX_COREBLOCKS

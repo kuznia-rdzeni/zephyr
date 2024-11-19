@@ -1,0 +1,5 @@
+# Copyright (c) 2024 Piotr Wegrzyn (Kuznia Rdzeni)
+# SPDX-License-Identifier: Apache-2.0
+
+config BOARD_LITEX_COREBLOCKS
+	select SOC_LITEX_COREBLOCKS

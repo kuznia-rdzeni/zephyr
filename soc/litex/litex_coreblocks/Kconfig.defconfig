@@ -1,0 +1,21 @@
+# Copyright (c) 2024 Piotr Wegrzyn (Kuznia Rdzeni)
+# SPDX-License-Identifier: Apache-2.0
+
+if SOC_LITEX_COREBLOCKS
+
+config SYS_CLOCK_HW_CYCLES_PER_SEC
+	default 50000000
+
+config NUM_IRQS
+	# Coreblocks uses hart-local interrupt controller:
+	# NUM_IRQS include RISC-V reserved interrupts 0..15, but there are only 16 usable
+	# interrupts (16..31)
+	# Custom platform interrupts used by LiteX are remapped in DTS from 0..15 to 16..31 and are
+	# consistent with LiteX numbering
+	default 32
+
+config REBOOT
+	depends on DT_HAS_LITEX_SOC_CONTROLLER_ENABLED
+	default y
+
+endif # SOC_LITEX_COREBLOCKS
