@@ -6,7 +6,7 @@
 
 /dts-v1/;
 
-#include <riscv32-litex-vexriscv.dtsi>
+#include <litex/riscv32-litex-vexriscv.dtsi>
 
 / {
 	model = "LiteX VexRiscV";
